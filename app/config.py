@@ -1,0 +1,1 @@
+backend_url = 'https://kinhkcovid19dataengine.herokuapp.com/'

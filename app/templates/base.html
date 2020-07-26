@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initail-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
+        <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}">
+        <!-- DataTables CSS -->
+        <link rel="stylesheet" href="{{url_for('static',filename='css/addons/datatables2.min.css')}}">    
+        <!-- DataTables Select CSS -->
+        <link rel="stylesheet" href="{{url_for('static',filename='css/addons/datatables-select2.min.css')}}">            
+        <!-- JQuery -->
+        <script type="text/javascript" src="{{url_for('static',filename='js/jquery.min.js')}}"></script>
+        <!-- Bootstrap tooltips -->
+        <script type="text/javascript" src="{{url_for('static',filename='js/popper.min.js')}}"></script>
+        <!-- Bootstrap core JavaScript -->
+        <script type="text/javascript" src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+        <!-- MDB core JavaScript -->
+        <script type="text/javascript" src="{{url_for('static',filename='js/mdb.min.js')}}"></script>
+        <!-- DataTables JS -->
+        <script type="text/javascript" src="{{url_for('static',filename='js/addons/datatables2.min.js')}}"></script>
+        <!-- DataTables Select JS -->
+        <script type="text/javascript" src="{{url_for('static',filename='js/addons/datatables-select2.min.js')}}"></script>       
+        {% block head %}{% endblock%}
+    </head>
+    <body>
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+        <a class="navbar-brand" href="#">Hong Kong COVID19 Information</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="/casenobymonth">Case by Month</a>
+                <a class="nav-item nav-link" href="/caseinfo">Case Information</a>
+            </div>
+        </div>
+    </nav>
+    <!--/.Navbar-->        
+    {% block body %}{% endblock%}            
+
+   
+    </body>
+</html>

@@ -1,0 +1,60 @@
+{% extends 'base.html'%}
+{% block head %}
+<title>Hong Kong COVID19 Information</title>
+<script type="text/javascript">
+$( document ).ready(function() {
+    $.ajax({
+            url:"{{ backend_url}}" + "getLatestSummary",
+            type:"post",
+            dataType: 'json',
+            processData:false,
+            contentType:false,
+            success:function(resultData){
+                $("#confirmedCases").html(resultData.no_of_confirmed_cases);
+                $("#dischargeCases").html(resultData.no_of_discharge_cases);
+                $("#criticalCases").html(resultData.no_of_hospitalised_cases_in_critical_condition);
+                $("#probaleCases").html(resultData.no_of_probable_cases);
+                $("#deathCases").html(resultData.no_of_death_cases);
+                
+            },
+            error:function(e){
+                alert(JSON.stringify(e));
+                alert("error");
+            }
+    });    
+
+
+
+
+
+});
+</script>
+{% endblock%}
+
+
+{% block body %}
+<div class="content">
+    <div class="main-overview">
+        <div class="overviewcard">
+            <div class="overviewcard__icon">No. of Confirmed Case</div>
+            <div class="overviewcard__info" id="confirmedCases"></div>
+        </div>
+        <div class="overviewcard">
+            <div class="overviewcard__icon">No. of Probale Case</div>
+            <div class="overviewcard__info" id="probaleCases"></div>
+        </div>         
+        <div class="overviewcard">
+            <div class="overviewcard__icon">No. of Discharge Case</div>
+            <div class="overviewcard__info" id="dischargeCases"></div>
+        </div>  
+        <div class="overviewcard">
+            <div class="overviewcard__icon">No. of Hospitalised Cases in critical_condition Case</div>
+            <div class="overviewcard__info" id="criticalCases"></div>
+        </div>                
+        <div class="overviewcard">
+            <div class="overviewcard__icon">No. of Dealth Case</div>
+            <div class="overviewcard__info" id="deathCases"></div>
+        </div>        
+    </div>
+</div>
+{% endblock%}

@@ -1,0 +1,112 @@
+{% extends 'base.html'%}
+{% block head %}
+<title>Hong Kong COVID19 Information</title>
+<script type="text/javascript">
+$( document ).ready(function() {
+    $.ajax({
+            url:"{{ backend_url}}" + "getCaseNoByMonth",
+            type:"post",
+            dataType: 'json',
+            processData:false,
+            contentType:false,
+            success:function(resultData){
+                var ctxL = document.getElementById("lineChart").getContext('2d');
+                var gradientFill = ctxL.createLinearGradient(0, 0, 0, 290);
+                gradientFill.addColorStop(0, "rgba(173, 53, 186, 1)");
+                gradientFill.addColorStop(1, "rgba(173, 53, 186, 0.1)");
+                var importCaseDataMap = resultData.import_case_data_map
+                var importMonthLables = [];
+                var importMonthData = [];
+                $.each( importCaseDataMap, function(index,value){
+                    importMonthLables.push(index);
+                    importMonthData.push(value); 
+                })
+
+                var localCaseDataMap = resultData.local_case_data_map
+                var localMonthLables = [];
+                var localMonthData = [];
+                $.each( localCaseDataMap, function(index,value){
+                    localMonthLables.push(index);
+                    localMonthData.push(value);
+                })
+
+                var myLineChart = new Chart(ctxL, {
+                type: 'line',
+                data: {
+                    labels: localMonthLables,
+                    datasets: [{
+                        label: "Local Case",
+                        data: localMonthData,
+                        backgroundColor: gradientFill,
+                        borderColor: [
+                            '#AD35BA',
+                        ],
+                        borderWidth: 2,
+                        pointBorderColor: "#fff",
+                        pointBackgroundColor: "rgba(173, 53, 186, 0.1)",
+                    }
+                    ,
+                    {
+                        label: "Import Case",
+                        data: importMonthData,
+                        backgroundColor: [
+                        'rgba(0, 137, 132, .2)',
+                        ],
+                        borderColor: [
+                        'rgba(0, 10, 130, .7)',
+                        ],
+                        borderWidth: 2
+                    }        
+                    ]
+                },
+                options: {
+                    responsive: true
+                }
+                });      
+                var totalImportCase = resultData.total_import_case;
+                var totalLocalCase = resultData.total_local_case;
+                var totalCase = totalImportCase + totalLocalCase;
+                $("#totalImportCase").html(totalImportCase);
+                $("#totalLocalCase").html(totalLocalCase);
+                $("#totalCase").html(totalCase);
+            },
+            error:function(e){
+                alert(JSON.stringify(e));
+                alert("error");
+            }
+    });    
+
+
+
+
+
+});
+</script>
+{% endblock%}
+
+
+{% block body %}
+<div class="content">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Total Case</th>
+            <th scope="col">Total Local Case</th>
+            <th scope="col">Total Import Case</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="totalCase"></td>
+                <td id="totalLocalCase"></td>
+                <td id="totalImportCase"></td>
+            </tr>
+        </tbody>
+    </table>
+    <!--Grid column-->
+    <div class="col-md-6" style="text-align:center">
+         <canvas id="lineChart"></canvas>
+    </div>
+    <!--Grid column-->   
+</div>
+{% endblock%}
