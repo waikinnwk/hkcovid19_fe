@@ -1,3 +1,11 @@
+.increaseStat {
+    color: red;
+}
+
+.decreaseStat {
+    color: green;
+}
+
 .main-overview {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));

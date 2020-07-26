@@ -10,12 +10,23 @@ $( document ).ready(function() {
             processData:false,
             contentType:false,
             success:function(resultData){
+                $("#asOfDate").html(resultData.as_of_date);
                 $("#confirmedCases").html(resultData.no_of_confirmed_cases);
                 $("#dischargeCases").html(resultData.no_of_discharge_cases);
                 $("#criticalCases").html(resultData.no_of_hospitalised_cases_in_critical_condition);
                 $("#probaleCases").html(resultData.no_of_probable_cases);
                 $("#deathCases").html(resultData.no_of_death_cases);
+                $("#todayConfirmedCases").html(resultData.no_of_confirmed_cases_today);
                 
+                var diffWithYesterday = resultData.no_of_confirmed_cases_today - resultData.no_of_confirmed_cases_b1                      
+                if(diffWithYesterday >= 0){
+                    $("#casesDiff").html("+"+diffWithYesterday);    
+                    $("#casesDiff").addClass("increaseStat");      
+                }
+                else {
+                    $("#casesDiff").html(diffWithYesterday);    
+                    $("#casesDiff").addClass("decreaseStat");          
+                }
             },
             error:function(e){
                 alert(JSON.stringify(e));
@@ -33,10 +44,17 @@ $( document ).ready(function() {
 
 
 {% block body %}
-<div class="content">
+<div class="content">   
     <div class="main-overview">
         <div class="overviewcard">
-            <div class="overviewcard__icon">No. of Confirmed Case</div>
+            <div class="overviewcard__icon"><span id="asOfDate"></span><br> Confirmed Case</div>
+            <div class="overviewcard__info">
+                <div id="todayConfirmedCases"></div>
+                <div id="casesDiff"></div>
+            </div>
+        </div>        
+        <div class="overviewcard">
+            <div class="overviewcard__icon">Total No. of Confirmed Case</div>
             <div class="overviewcard__info" id="confirmedCases"></div>
         </div>
         <div class="overviewcard">
@@ -48,7 +66,7 @@ $( document ).ready(function() {
             <div class="overviewcard__info" id="dischargeCases"></div>
         </div>  
         <div class="overviewcard">
-            <div class="overviewcard__icon">No. of Hospitalised Cases in critical_condition Case</div>
+            <div class="overviewcard__icon">No. of Hospitalised Cases in critical condition Case</div>
             <div class="overviewcard__info" id="criticalCases"></div>
         </div>                
         <div class="overviewcard">
