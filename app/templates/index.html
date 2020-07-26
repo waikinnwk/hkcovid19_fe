@@ -27,6 +27,19 @@ $( document ).ready(function() {
                     $("#casesDiff").html(diffWithYesterday);    
                     $("#casesDiff").addClass("decreaseStat");          
                 }
+                var points = "";
+                for(i = 0 ; i <= 14;i++){
+                    if(i > 0)
+                        points +=" ";
+                    
+                    if(i ==0)
+                        points += "00, "+resultData['no_of_confirmed_cases_b'+(14-i)];
+                    else if(i < 14)
+                        points += (i*10)+", "+resultData['no_of_confirmed_cases_b'+(14-i)];
+                    else
+                        points += (i*10)+", "+resultData['no_of_confirmed_cases_today'];
+                }
+                //$("#daysCaseChart").attr("points",points);
             },
             error:function(e){
                 alert(JSON.stringify(e));
@@ -51,6 +64,8 @@ $( document ).ready(function() {
             <div class="overviewcard__info">
                 <div id="todayConfirmedCases"></div>
                 <div id="casesDiff"></div>
+                <div>                  
+                </div>
             </div>
         </div>        
         <div class="overviewcard">
