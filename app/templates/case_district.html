@@ -1,0 +1,42 @@
+{% extends 'base.html'%}
+{% block head %}
+<title>Hong Kong COVID19 Information</title>
+<script type="text/javascript">
+    $( document ).ready(function() {
+        $.ajax({
+            url:"{{ backend_url}}" + "getDistrictData",
+            type:"post",
+            dataType: 'json',
+            processData:false,
+            contentType:false,
+            success:function(resultData){
+                $.each(resultData, function(i, item) {
+                    jQuery('<div/>', {
+                                id: 'overviewcard'+i,
+                                "class": 'overviewcard'
+                            }).appendTo('#info');
+                    jQuery('<div/>', {
+                                "class": 'overviewcard__icon'
+                    }).html(item.district).appendTo('#overviewcard'+i);
+                    jQuery('<div/>', {
+                                "class": 'overviewcard__info'
+                    }).html(item.no_of_case).appendTo('#overviewcard'+i);                                                        
+                });
+            },
+            error:function(e){
+                alert(JSON.stringify(e));
+                alert("error");
+            }        
+         });
+    });
+</script>
+{% endblock%}
+
+
+{% block body %}
+<div class="content"> 
+    <div class="container"><h3>District in which probable/confirmed cases have resided in the past 14 days</h3></div>
+    <div id="info" class="main-overview">
+    </div>
+</div>
+{% endblock%}

@@ -15,3 +15,8 @@ def case_by_month():
 @app.route('/caseinfo')
 def case_info():
     return render_template('case_info.html',backend_url=backend_url)    
+
+
+@app.route('/casenobydistrict')
+def case_by_district():
+    return render_template('case_district.html',backend_url=backend_url)    
