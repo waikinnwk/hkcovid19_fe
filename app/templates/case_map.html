@@ -22,7 +22,7 @@ function loadBuildingMarker(){
                     if(item.lat != "NULL" && item.lon != "NULL" &&
                         typeof(item.lat)  !== "undefined" && typeof(item.lon)  !== "undefined"){
                         var marker = L.marker([parseFloat(item.lat) ,parseFloat(item.lon)]).addTo(mymap);
-                        marker.bindPopup(item.building_name +"<br>No Of Caes :" + item.no_of_case);
+                        marker.bindPopup(item.building_name +"<br>No Of Cases :" + item.no_of_case);
                     }
                 });
             },
