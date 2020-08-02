@@ -1,0 +1,54 @@
+{% extends 'base.html'%}
+{% block head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+crossorigin=""></script>   
+<title>Hong Kong COVID19 Information</title>
+<script type="text/javascript">
+function loadBuildingMarker(){
+    $.ajax({
+            url:"{{ backend_url}}" + "getRelatedBuildings",
+            type:"post",
+            dataType: 'json',
+            processData:false,
+            contentType:false,
+            success:function(resultData){
+                var urlGetXYPre = "https://nominatim.openstreetmap.org/search?q=";
+                var urlGetXYPost = "&format=json&polygon=1&addressdetails=1";
+                $.each(resultData, function(i, item) {
+                    if(item.lat != "NULL" && item.lon != "NULL" &&
+                        typeof(item.lat)  !== "undefined" && typeof(item.lon)  !== "undefined"){
+                        var marker = L.marker([parseFloat(item.lat) ,parseFloat(item.lon)]).addTo(mymap);
+                        marker.bindPopup(item.building_name +"<br>No Of Caes :" + item.no_of_case);
+                    }
+                });
+            },
+            error:function(e){
+                alert(JSON.stringify(e));
+                alert("error");
+            }        
+         });  
+}
+</script>
+{% endblock%}
+{% block body %}
+<div class="content"> 
+    <div class="container"><h3>Building Location in which probable/confirmed cases have resided in the past 14 days</h3></div>
+    <div id="mapid" style="width: 100%; height: 500px;"></div>
+</div>
+<script type="text/javascript">
+    var mymap = L.map('mapid').setView([22.3374, 114.1754], 11);
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: 'pk.eyJ1Ijoid2Fpa2lubndrIiwiYSI6ImNrZGNsYzRjNDBwOTIycHQ4eTE5OXE1bnEifQ.Qb_oBhkH01M3VS4svHSgDg'
+}).addTo(mymap);    
+loadBuildingMarker();
+</script>
+{% endblock%}

@@ -21,3 +21,7 @@ def case_info():
 @app.route('/casenobydistrict')
 def case_by_district():
     return render_template('case_district.html',backend_url=backend_url)    
+
+@app.route('/casemap')
+def case_map():
+    return render_template('case_map.html',backend_url=backend_url)   
