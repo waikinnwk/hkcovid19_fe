@@ -2,12 +2,33 @@
 {% block head %} 
 <title>Hong Kong COVID19 Information</title>
 <script type="text/javascript">
-    $( document ).ready(function() {
-       
+    var curPage = 1;
+    var recordPerPage = 100;
+    var noOfPage = 0;
+    function goToPre(){
+        curPage -=1;
+        getCaseDetail(curPage,recordPerPage);
+        loadPaging();
+    }
+
+    function goToNext(){
+        curPage +=1;
+        getCaseDetail(curPage,recordPerPage);
+        loadPaging();
+    }
+
+    function goToPage(page){
+        curPage = page;
+        getCaseDetail(curPage,recordPerPage);
+        loadPaging();
+    }
+
+    function getCaseDetail(pageNo,rPerPage){
+        $("#info").empty();
         $.ajax({
             url:"{{ backend_url}}" + "getCasesByPage",
             type:"post",
-            data: {page: "0", record_per_page: "100"},
+            data: {page: pageNo, record_per_page: rPerPage},
             success:function(resultData){
                 $.each(resultData, function(i, item) {
                     jQuery('<div/>', {
@@ -36,7 +57,70 @@
                 alert(JSON.stringify(e));
                 alert("error");
             }        
-         });        
+         }); 
+    }
+
+
+    function loadPaging(){
+        $("#pagination" ).empty();
+        if(curPage > 1){
+            jQuery('<li/>', {
+                    id: 'preBtn',
+                    class: 'page-item'
+                    }).appendTo('#pagination'); 
+            jQuery('<a/>', {
+                    id: 'preBtnA',
+                    class: 'page-link'
+                    }).html("Previous").appendTo('#preBtn');              
+            $( "#preBtnA" ).click(function() {
+                goToPre();
+            });       
+        }
+        for(var i = 1; i <= noOfPage;i++){
+            if(i >= curPage - 3 && i <=curPage +3){
+                jQuery('<li/>', {
+                        id: 'p'+i,
+                        class: 'page-item'
+                        }).appendTo('#pagination');    
+                        jQuery('<a/>', {
+                        id: 'pA'+i,
+                        class: 'page-link'
+                        }).html(i).appendTo('#p'+i);   
+                $("#pA"+i).attr("onclick","goToPage("+i+")");
+            }                                                  
+        }
+        if(curPage < noOfPage){
+            jQuery('<li/>', {
+                    id: 'nextBtn',
+                    class: 'page-item'
+                    }).appendTo('#pagination'); 
+            jQuery('<a/>', {
+                    id: 'nextBtnA',
+                    class: 'page-link'
+                    }).html("Next").appendTo('#nextBtn');        
+            $( "#nextBtnA" ).click(function() {
+                goToNext();
+            });                                  
+        }
+    }
+
+    $( document ).ready(function() {
+        $.ajax({
+            url:"{{ backend_url}}" + "getNoOfPage",
+            type:"post",
+            data: {record_per_page: "100"},
+            async: false,
+            success:function(resultData){
+                noOfPage = resultData.no_of_page;
+                loadPaging();
+            },
+            error:function(e){
+                alert(JSON.stringify(e));
+                alert("error");
+            }        
+         }); 
+
+         getCaseDetail(curPage,recordPerPage);
     });
 </script>
 {% endblock%}
@@ -45,6 +129,11 @@
 {% block body %}
 <div class="content"> 
     <div class="container"><h3>Case Detail</h3></div>
+    <div class="container-fluid">  
+        <ul id="pagination" class="pagination">  
+
+        </ul>  
+    </div> 
     <div id="info" class="case-overview">
     </div>
 </div>  
