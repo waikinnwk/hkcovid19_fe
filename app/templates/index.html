@@ -47,11 +47,14 @@ $( document ).ready(function() {
                         points += (i/14*100)+", ";
                         v = parseInt(resultData['no_of_confirmed_cases_today']);
                     }
-
-                    v = maxCaseNo + 20 - v;
+                    console.log("v1:"+v);
+                    v = maxCaseNo - v;
+                    console.log("v2:"+v);
                     v = v / maxCaseNo * 100;
+                    console.log("v3:"+v);
                     points +=v;
                 }
+                console.log("points:"+points);
                 $("#daysCaseChart").attr("points",points);
             },
             error:function(e){
@@ -79,7 +82,7 @@ $( document ).ready(function() {
 
             </div>
             <div>
-                <svg height="100" width="100">
+                <svg class="polylineChart" height="120" width="120">
                     <polyline id="daysCaseChart"
                     style="fill:none;stroke:black;stroke-width:2" />
                 </svg>
